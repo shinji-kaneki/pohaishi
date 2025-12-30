@@ -1,0 +1,221 @@
+local vu1 = loadstring(game:HttpGet("https://raw.githubusercontent.com/dream77239/china-ui/refs/heads/main/China%20ui.lua"))()
+local v2 = vu1:CreateWindow({
+    Title = "kanl defuse division",
+    Icon = "sword",
+    IconThemed = true,
+    Author = ":/",
+    Folder = "CloudHub",
+    Size = UDim2.fromOffset(480, 380),
+    Transparent = true,
+    Theme = "Light",
+    User = {
+        Enabled = true,
+        Callback = function()
+            print("clicked")
+        end,
+        Anonymous = true
+    },
+    SideBarWidth = 200,
+    ScrollBarEnabled = true
+})
+local v3 = v2:Tab({
+    Title = "silent aim",
+    Icon = "crosshair",
+    Locked = false
+})
+v3:Button({
+    Title = "bypass anti cheat",
+    Callback = function()
+        local v4 = next
+        local v5, v6 = getgc(true)
+        while true do
+            local v7
+            v6, v7 = v4(v5, v6)
+            if v6 == nil then
+                break
+            end
+            if typeof(v7) == "function" and (getfenv(v7).script and (getfenv(v7).script.Parent == nil and not isourclosure(v7))) then
+                local v8 = debug.info(v7, "s")
+                if v8 ~= "[C]" and not (v8:find("Network") or v8:find("PlayerGui.Client")) then
+                    hookfunction(v7, function()
+                        return coroutine.yield()
+                    end)
+                end
+            end
+        end
+    end
+})
+local vu9 = game:GetService("Workspace")
+local vu10 = game:GetService("Players")
+local v11 = game:GetService("RunService")
+local vu12 = vu10.LocalPlayer
+local vu13 = vu9.CurrentCamera
+local vu14 = false
+local vu15 = "Head"
+local vu16 = 250
+local vu17 = false
+local vu18 = 100
+local vu19 = nil
+local vu20 = nil
+local vu21 = 0
+local vu22 = 0.1
+local vu23 = Drawing.new("Circle")
+vu23.Visible = false
+vu23.Radius = vu16
+vu23.Color = Color3.fromRGB(255, 255, 255)
+vu23.Thickness = 1
+vu23.Transparency = 1
+vu23.Filled = false
+vu23.Position = Vector2.new(vu13.ViewportSize.X / 2, vu13.ViewportSize.Y / 2)
+local v24 = vu13
+vu13.GetPropertyChangedSignal(v24, "ViewportSize"):Connect(function()
+    vu23.Position = Vector2.new(vu13.ViewportSize.X / 2, vu13.ViewportSize.Y / 2)
+end)
+local function vu42()
+    if vu14 then
+        local v25 = math.huge
+        local v26 = vu13.CFrame
+        local v27 = v26.Position
+        local v28 = v26.LookVector
+        local v29 = vu10
+        local v30, v31, v32 = ipairs(v29:GetPlayers())
+        local v33 = nil
+        while true do
+            local v34
+            v32, v34 = v30(v31, v32)
+            if v32 == nil then
+                break
+            end
+            if v34 ~= vu12 then
+                local v35 = v34.Character
+                if v35 then
+                    local v36
+                    if vu15 ~= "\233\154\143\230\156\186" then
+                        v36 = v35:FindFirstChild(vu15)
+                    else
+                        local v37 = {
+                            "Head",
+                            "HumanoidRootPart",
+                            "Left Arm",
+                            "Right Arm",
+                            "Left Leg",
+                            "Right Leg"
+                        }
+                        v36 = v35:FindFirstChild(v37[math.random(1, # v37)])
+                    end
+                    local v38 = v35:FindFirstChildOfClass("Humanoid")
+                    if v36 and (v38 and (v38.Health > 0 and not v35:FindFirstChild("ForceField"))) then
+                        local v39 = v36.Position - v27
+                        local v40 = v39.Magnitude
+                        if math.deg(math.acos(v28:Dot(v39.Unit))) <= vu16 / 10 and v40 < v25 then
+                            if vu17 then
+                                local v41 = RaycastParams.new()
+                                v41.FilterDescendantsInstances = {
+                                    vu12.Character,
+                                    v35
+                                }
+                                v41.FilterType = Enum.RaycastFilterType.Blacklist
+                                if not vu9:Raycast(v27, v39, v41) then
+                                    v33 = v36
+                                    v25 = v40
+                                end
+                            else
+                                v33 = v36
+                                v25 = v40
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        vu20 = v33
+    else
+        vu20 = nil
+    end
+end
+v11.RenderStepped:Connect(function()
+    if vu22 < tick() - vu21 then
+        vu21 = tick()
+        vu42()
+    end
+end)
+local function vu43()
+    return vu20
+end
+vu19 = hookmetamethod(game, "__namecall", function(p44, ...)
+    local v45 = getnamecallmethod()
+    if checkcaller() or (p44 ~= vu9 or v45 ~= "Raycast" and v45 ~= "FindPartOnRay") then
+        return vu19(p44, ...)
+    end
+    local v46 = vu43()
+    if v46 and math.random(1, 100) <= vu18 then
+        local v47 = {
+            ...
+        }
+        local v48 = nil
+        local v49 = nil
+        if v45 == "Raycast" then
+            v48 = v47[1]
+            v49 = v47[2]
+        else
+            local v50 = v47[1]
+            if typeof(v50) == "Ray" then
+                v48 = v50.Origin
+                v49 = v50.Direction
+            end
+        end
+        if v48 and v49 then
+            return {
+                Instance = v46,
+                Position = v46.Position,
+                Normal = (v46.Position - v48).Unit,
+                Material = Enum.Material.Plastic
+            }
+        end
+    end
+    return vu19(p44, ...)
+end)
+local vu51 = false
+local vu52 = Drawing.new("Line")
+vu52.Visible = false
+vu52.Thickness = 1
+vu52.Transparency = 1
+vu52.Color = Color3.fromRGB(255, 255, 255)
+local function vu55(p53)
+    local v54 = p53:FindFirstChild("PlayerStates")
+    if v54 and v54:FindFirstChild("Team") then
+        return v54.Team.Value
+    else
+        return nil
+    end
+end
+local function vu59(p56)
+    local v57 = vu55(vu12)
+    local v58 = vu55(p56)
+    return v57 ~= nil and v57 == v58
+end
+local function vu65(p60)
+    local v61, v62 = vu13:WorldToViewportPoint(p60)
+    if not v62 then
+        return false
+    end
+    local v63 = v61.X - vu23.Position.X
+    local v64 = v61.Y - vu23.Position.Y
+    return v63 * v63 + v64 * v64 <= vu16 * vu16
+end
+v11.RenderStepped:Connect(function()
+    if vu51 and vu14 then
+        local v66 = vu20
+        if v66 then
+            local v67 = v66.Parent
+            if v67 then
+                local v68 = vu10:GetPlayerFromCharacter(v67)
+                if v68 then
+                    if vu59(v68) then
+                        vu52.Visible = false
+                        return
+                    else
+                        local v69 = v67:FindFirstChildOfClass("Humanoid")
+                        if v69 and v69.Health > 0 then
+                            if vu17 then
+                            
